@@ -1,104 +1,137 @@
-import { ref, onUnmounted } from 'vue';
+import { ref, onUnmounted, watch, type Ref } from 'vue'
 
-export function useSpeechRecognition(onResult: (result: string) => void, onClear: () => void, sourceLang: string) {
-  const isListening = ref(false);
-  const error = ref<string | null>(null);
+// Interfaces para tipado estricto
+interface SpeechRecognitionState {
+  isListening: Ref<boolean>
+  error: Ref<string | null>
+  start: () => void
+  stop: () => void
+}
 
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  let recognition: SpeechRecognition | null = null;
+type OnResultCallback = (text: string) => void
+type OnClearCallback = () => void
 
-  let inactivityTimer: ReturnType<typeof setTimeout> | null = null;
-  const TIMEOUT_DURATION = 3000; // 3 segundos de inactividad
+/**
+ * Composable para reconocimiento de voz continuo con idioma reactivo.
+ * @param onResult - Callback cuando se detecta texto.
+ * @param onClear - Callback cuando hay inactividad o error.
+ * @param sourceLang - Ref reactivo con el código de idioma (ej: 'es', 'en', 'zh-CN').
+ */
+export function useSpeechRecognition(
+    onResult: OnResultCallback,
+    onClear: OnClearCallback,
+    sourceLang: Ref<string>
+): SpeechRecognitionState {
+  const isListening = ref<boolean>(false)
+  const error = ref<string | null>(null)
+
+  const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition
+  let recognition: SpeechRecognition | null = null
+  let inactivityTimer: ReturnType<typeof setTimeout> | null = null
+
+  const TIMEOUT_DURATION = 4000 // 4 segundos sin voz para limpiar
 
   if (SpeechRecognition) {
-    recognition = new SpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.lang = sourceLang; // Establecer el idioma aquí
+    recognition = new SpeechRecognition()
+    recognition.continuous = true
+    recognition.interimResults = true
+    recognition.lang = sourceLang.value
+
+    // Reactividad: cambia el idioma en caliente si el usuario lo modifica
+    watch(sourceLang, (newLang, oldLang) => {
+      if (recognition && isListening.value && newLang !== oldLang) {
+        recognition.stop()
+        setTimeout(() => {
+          recognition!.lang = newLang
+          recognition!.start()
+        }, 150)
+      }
+    })
 
     recognition.onstart = () => {
-      isListening.value = true;
-      error.value = null;
-      resetInactivityTimer();
-    };
+      isListening.value = true
+      error.value = null
+      resetInactivityTimer()
+    }
 
     recognition.onend = () => {
-      isListening.value = false;
-      // Reiniciar automáticamente si no fue una parada manual
-      if (recognition) {
-        console.log("Reconocimiento finalizado (onend). Reiniciando...");
-        setTimeout(() => {
-          try {
-            recognition?.start();
-          } catch (e) {
-            console.error("Error al reiniciar el reconocimiento desde onend:", e);
-            error.value = "Error al reiniciar el reconocimiento.";
-          }
-        }, 100); // Pequeña pausa antes de reiniciar
-      }
-    };
+      isListening.value = false
+      setTimeout(() => {
+        try {
+          recognition?.start()
+        } catch (e) {
+          error.value = 'No se pudo reiniciar el reconocimiento'
+        }
+      }, 120)
+    }
 
     recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
-      error.value = event.error;
-      isListening.value = false;
-      if (inactivityTimer) clearTimeout(inactivityTimer);
-      onClear(); // Limpiar subtítulos en caso de error
-    };
+      error.value = event.error
+      isListening.value = false
+      clearTimer()
+      onClear()
+    }
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
-      let finalTranscript = '';
-      let interimTranscript = '';
+      let finalText = ''
+      let interimText = ''
 
-      for (let i = event.resultIndex; i < event.results.length; ++i) {
-        if (event.results[i].isFinal) {
-          finalTranscript += event.results[i][0].transcript;
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const result = event.results[i]
+        if (result.isFinal) {
+          finalText += result[0].transcript
         } else {
-          interimTranscript += event.results[i][0].transcript;
+          interimText += result[0].transcript
         }
       }
-      const currentText = finalTranscript || interimTranscript;
+
+      const currentText = finalText || interimText
       if (currentText && currentText.trim() !== '') {
-        onResult(currentText);
-        resetInactivityTimer();
+        onResult(currentText)
+        resetInactivityTimer()
       }
-    };
+    }
   } else {
-    error.value = 'La API de reconocimiento de voz no es compatible con este navegador. Por favor, usa Google Chrome.';
+    error.value = 'La API Web Speech no está disponible en este navegador'
   }
 
-  const resetInactivityTimer = () => {
-    if (inactivityTimer) {
-      clearTimeout(inactivityTimer);
-    }
+  function resetInactivityTimer(): void {
+    clearTimer()
     inactivityTimer = setTimeout(() => {
-      console.log("Temporizador de inactividad expirado. Limpiando subtítulos.");
-      onClear();
-    }, TIMEOUT_DURATION);
-  };
+      onClear()
+    }, TIMEOUT_DURATION)
+  }
 
-  const start = () => {
+  function clearTimer(): void {
+    if (inactivityTimer) {
+      clearTimeout(inactivityTimer)
+      inactivityTimer = null
+    }
+  }
+
+  function start(): void {
     if (recognition && !isListening.value) {
-      recognition.lang = sourceLang; // Asegurarse de que el idioma esté actualizado al iniciar
-      recognition.start();
+      recognition.lang = sourceLang.value
+      recognition.start()
     }
-  };
+  }
 
-  const stop = () => {
+  function stop(): void {
     if (recognition && isListening.value) {
-      recognition.stop();
-      if (inactivityTimer) clearTimeout(inactivityTimer);
-      onClear(); // Limpiar inmediatamente al detener manualmente
+      recognition.stop()
+      clearTimer()
+      onClear()
     }
-  };
+  }
 
   onUnmounted(() => {
-    stop();
-  });
+    stop()
+  })
 
   return {
     isListening,
     error,
     start,
     stop,
-  };
+  }
 }

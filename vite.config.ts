@@ -1,8 +1,20 @@
+// vite.config.ts
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
+import vueDevTools from 'vite-plugin-vue-devtools'
+import path from 'path'
 
 export default defineConfig({
-  base: '/translation-page-for-obs/', // Ajustado para el repositorio translation-page-for-obs
-  plugins: [vue(), tailwindcss()],
+  base: '/captionflow/',
+  plugins: [
+    vueDevTools(),
+    vue(),
+    tailwindcss(),
+  ],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
 })

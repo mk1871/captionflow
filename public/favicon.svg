@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+    <defs>
+        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+
+    <!-- Fondo del ícono -->
+    <rect width="32" height="32" rx="6" fill="url(#gradient)"/>
+
+    <!-- Líneas de flujo de subtítulos -->
+    <rect x="4" y="8" width="16" height="2" rx="1" fill="white" opacity="0.9"/>
+    <rect x="4" y="12" width="20" height="2" rx="1" fill="white" opacity="0.9"/>
+    <rect x="4" y="16" width="14" height="2" rx="1" fill="white" opacity="0.9"/>
+
+    <!-- Flecha de flujo -->
+    <path d="M22 10l4 4-4 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.8"/>
+
+    <!-- Símbolo de idiomas -->
+    <circle cx="16" cy="24" r="4" stroke="white" stroke-width="1.5" fill="none" opacity="0.7"/>
+    <path d="M12 24h8M14 20c1 2 1 6 0 8M18 20c-1 2-1 6 0 8" stroke="white" stroke-width="1" fill="none" opacity="0.7"/>
+</svg>

@@ -1,27 +1,38 @@
 {
-  "name": "pruebas-voz-vue",
+  "name": "captionflow",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "CaptionFlow - Aplicación profesional para subtítulos multiidioma en tiempo real",
+  "author": "Manuel Kas <manuelkas2022@gmail.com>",
+  "homepage": "https://mk1871.github.io/captionflow/",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.525.0",
+    "tailwind-merge": "^3.3.1",
     "vue": "^3.5.17"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.11",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.16",
     "@types/dom-speech-recognition": "^0.0.6",
+    "@types/node": "^24.0.13",
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/tsconfig": "^0.7.0",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.6",
+    "gh-pages": "^6.3.0",
     "tailwindcss": "^4.1.11",
+    "tw-animate-css": "^1.3.5",
     "typescript": "~5.8.3",
     "vite": "^7.0.4",
+    "vite-plugin-vue-devtools": "^7.7.7",
     "vue-tsc": "^2.2.12"
   }
 }

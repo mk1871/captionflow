@@ -1,164 +1,236 @@
-import { reactive, watch, computed } from 'vue';
+import {
+  reactive,
+  watch,
+  computed,
+  readonly,
+  provide,
+  inject,
+  type Ref,
+} from 'vue'
 
-export const availableFonts = [
-  'Roboto',
-  'Bebas Neue',
-  'Audiowide',
-  'Black Ops One',
-  'Russo One',
-  'Orbitron',
-  'Anton',
-  'Teko',
-  'Rajdhani',
-  'Press Start 2P',
-];
+/* ---------- Interfaces TypeScript ---------- */
 
 export interface SubtitleStyle {
-  font: string;
-  color: string;
-  size: number;
-  shadowColor: string;
-  shadowOffset: number;
+  font: string
+  color: string
+  size: number
+  shadowColor: string
+  shadowOffset: number
+  weight: number
 }
 
 export interface TranslationSetting {
-  active: boolean;
-  lang: string;
-  style: SubtitleStyle;
+  active: boolean
+  lang: string
+  style: SubtitleStyle
 }
 
 export interface Settings {
-  showOriginal: boolean;
-  sourceLang: string;
-  original: SubtitleStyle;
-  translations: TranslationSetting[];
+  showOriginal: boolean
+  sourceLang: string
+  original: SubtitleStyle
+  translations: TranslationSetting[]
+  isDarkMode: boolean
 }
 
-// Lista de idiomas para reconocimiento de voz (con locale)
-export const speechLanguages = [
-  { code: 'es-ES', name: 'Español (España)' },
-  { code: 'en-US', name: 'Inglés (Estados Unidos)' },
-  { code: 'fr-FR', name: 'Francés (Francia)' },
-  { code: 'de-DE', name: 'Alemán (Alemania)' },
-  { code: 'it-IT', name: 'Italiano (Italia)' },
-  { code: 'pt-PT', name: 'Portugués (Portugal)' },
-  { code: 'pt-BR', name: 'Portugués (Brasil)' },
-  { code: 'ja-JP', name: 'Japonés (Japón)' },
-  { code: 'ko-KR', name: 'Coreano (Corea del Sur)' },
-  { code: 'zh-CN', name: 'Chino (Mandarín, Simplificado)' },
-  { code: 'ru-RU', name: 'Ruso (Rusia)' },
-  { code: 'ar-SA', name: 'Árabe (Arabia Saudita)' },
-  { code: 'hi-IN', name: 'Hindi (India)' },
-  { code: 'tr-TR', name: 'Turco (Turquía)' },
-  { code: 'nl-NL', name: 'Neerlandés (Países Bajos)' },
-  { code: 'sv-SE', name: 'Sueco (Suecia)' },
-  { code: 'pl-PL', name: 'Polaco (Polonia)' },
-  { code: 'da-DK', name: 'Danés (Dinamarca)' },
-  { code: 'fi-FI', name: 'Finlandés (Finlandia)' },
-  { code: 'no-NO', name: 'Noruego (Noruega)' },
-];
+/* ---------- Catálogos de configuración ---------- */
 
-// Lista de idiomas para traducción (códigos ISO 639-1)
-export const translationLanguages = [
-  { code: 'en', name: 'Inglés' },
+export const availableFonts: readonly string[] = [
+  'Inter',
+  'Roboto',
+  'Lato',
+  'Montserrat',
+  'Open Sans',
+  'Noto Sans'
+] as const
+
+export const fontWeightsByFont: Record<string, number[]> = {
+  'Inter': [500, 600, 700, 800],
+  'Roboto': [500, 700, 900],
+  'Lato': [700, 900],
+  'Montserrat': [600, 700, 800, 900],
+  'Open Sans': [600, 700, 800],
+  'Noto Sans': [500, 700, 900],
+}
+
+export const speechLanguages: readonly { code: string; name: string }[] = [
   { code: 'es', name: 'Español' },
+  { code: 'en', name: 'Inglés' },
   { code: 'fr', name: 'Francés' },
   { code: 'de', name: 'Alemán' },
   { code: 'it', name: 'Italiano' },
   { code: 'pt', name: 'Portugués' },
+  { code: 'ru', name: 'Ruso' },
+  { code: 'zh-CN', name: 'Chino (simplificado)' },
+  { code: 'zh-TW', name: 'Chino (tradicional)' },
   { code: 'ja', name: 'Japonés' },
   { code: 'ko', name: 'Coreano' },
-  { code: 'zh-CN', name: 'Chino Simplificado' },
-  { code: 'ru', name: 'Ruso' },
   { code: 'ar', name: 'Árabe' },
   { code: 'hi', name: 'Hindi' },
   { code: 'tr', name: 'Turco' },
-  { code: 'nl', name: 'Neerlandés' },
-  { code: 'sv', name: 'Sueco' },
   { code: 'pl', name: 'Polaco' },
-  { code: 'da', name: 'Danés' },
-  { code: 'fi', name: 'Finlandés' },
-  { code: 'no', name: 'Noruego' },
-  { code: 'th', name: 'Tailandés' },
+  { code: 'nl', name: 'Holandés' },
   { code: 'id', name: 'Indonesio' },
-  { code: 'vi', name: 'Vietnamita' },
-  { code: 'el', name: 'Griego' },
-  { code: 'cs', name: 'Checo' },
-  { code: 'hu', name: 'Húngaro' },
-];
+  { code: 'th', name: 'Tailandés' },
+  { code: 'vi', name: 'Vietnamita' }
+] as const
+
+export const translationLanguages = speechLanguages
+
+/* ---------- Valores por defecto actualizados ---------- */
 
 const defaultSettings: Settings = {
-  showOriginal: true,
-  sourceLang: 'es-ES',
+  showOriginal: false,
+  sourceLang: 'es',
+  isDarkMode: true,
   original: {
-    font: 'Roboto',
+    font: 'Lato',
     color: '#ffffff',
-    size: 48,
+    size: 33,
     shadowColor: '#000000',
     shadowOffset: 2,
+    weight: 700,
   },
   translations: [
     {
       active: true,
       lang: 'en',
       style: {
-        font: 'Roboto',
+        font: 'Montserrat',
         color: '#ffd700',
-        size: 48,
+        size: 33,
         shadowColor: '#000000',
         shadowOffset: 2,
+        weight: 700,
       },
     },
     {
       active: false,
       lang: 'fr',
       style: {
-        font: 'Roboto',
-        color: '#ff4444',
-        size: 48,
+        font: 'Noto Sans',
+        color: '#1E90FF',
+        size: 33,
         shadowColor: '#000000',
         shadowOffset: 2,
+        weight: 500,
       },
     },
   ],
-};
+}
 
-const storedSettings = localStorage.getItem('subtitleSettings');
-const settings = reactive<Settings>(storedSettings ? JSON.parse(storedSettings) : defaultSettings);
+/* ---------- Gestión de persistencia con localStorage ---------- */
 
-watch(settings, (newSettings) => {
-  localStorage.setItem('subtitleSettings', JSON.stringify(newSettings));
-}, { deep: true });
+const STORAGE_KEY = 'captionFlowSettings' // ✅ Actualizado
 
-export function useSettings() {
-  const restoreDefaults = () => {
-    Object.assign(settings, defaultSettings);
-  };
+function loadFromStorage(): Settings {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored) {
+      const parsed = JSON.parse(stored)
+      if (parsed && typeof parsed === 'object' && parsed.original && parsed.translations) {
+        if (parsed.isDarkMode === undefined) {
+          parsed.isDarkMode = true
+        }
+        return parsed
+      }
+    }
+  } catch (error) {
+    console.warn('Error al cargar configuración desde localStorage:', error)
+  }
+  return defaultSettings
+}
 
-  // Helper para obtener el código base del idioma (ej. 'es' de 'es-ES')
-  const getBaseLangCode = (fullCode: string) => fullCode.split('-')[0];
+function saveToStorage(settings: Settings): void {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings))
+  } catch (error) {
+    console.error('Error al guardar configuración en localStorage:', error)
+  }
+}
 
-  const getAvailableTranslationLangs = (currentTranslationIndex: number) => {
-    const selectedSourceLangBase = getBaseLangCode(settings.sourceLang);
-    const selectedTrans1Lang = settings.translations[0].lang;
-    const selectedTrans2Lang = settings.translations[1].lang;
+/* ---------- Estado reactivo con persistencia automática ---------- */
 
-    return translationLanguages.filter(lang => {
-      // Excluir si es el idioma de origen
-      if (lang.code === selectedSourceLangBase) return false;
+const state = reactive<Settings>(loadFromStorage())
 
-      // Excluir si es el idioma seleccionado en Traducción 1 (y estamos filtrando para Traducción 2)
-      if (currentTranslationIndex === 1 && lang.code === selectedTrans1Lang) return false;
+document.documentElement.classList.toggle('dark', state.isDarkMode)
 
-      // Excluir si es el idioma seleccionado en Traducción 2 (y estamos filtrando para Traducción 1)
-      if (currentTranslationIndex === 0 && lang.code === selectedTrans2Lang) return false;
+watch(
+    state,
+    (newSettings) => {
+      saveToStorage(newSettings)
+      document.documentElement.classList.toggle('dark', newSettings.isDarkMode)
+    },
+    { deep: true }
+)
 
-      return true;
-    });
-  };
+/* ---------- Funciones utilitarias ---------- */
 
-  const availableTranslationLangs1 = computed(() => getAvailableTranslationLangs(0));
-  const availableTranslationLangs2 = computed(() => getAvailableTranslationLangs(1));
+function restoreDefaults(): void {
+  state.showOriginal = defaultSettings.showOriginal
+  state.sourceLang = defaultSettings.sourceLang
+  state.isDarkMode = defaultSettings.isDarkMode
 
-  return { settings, restoreDefaults, speechLanguages, translationLanguages, availableTranslationLangs1, availableTranslationLangs2 };
+  state.original.font = defaultSettings.original.font
+  state.original.color = defaultSettings.original.color
+  state.original.size = defaultSettings.original.size
+  state.original.shadowColor = defaultSettings.original.shadowColor
+  state.original.shadowOffset = defaultSettings.original.shadowOffset
+  state.original.weight = defaultSettings.original.weight
+
+  state.translations[0].active = defaultSettings.translations[0].active
+  state.translations[0].lang = defaultSettings.translations[0].lang
+  state.translations[0].style.font = defaultSettings.translations[0].style.font
+  state.translations[0].style.color = defaultSettings.translations[0].style.color
+  state.translations[0].style.size = defaultSettings.translations[0].style.size
+  state.translations[0].style.shadowColor = defaultSettings.translations[0].style.shadowColor
+  state.translations[0].style.shadowOffset = defaultSettings.translations[0].style.shadowOffset
+  state.translations[0].style.weight = defaultSettings.translations[0].style.weight
+
+  state.translations[1].active = defaultSettings.translations[1].active
+  state.translations[1].lang = defaultSettings.translations[1].lang
+  state.translations[1].style.font = defaultSettings.translations[1].style.font
+  state.translations[1].style.color = defaultSettings.translations[1].style.color
+  state.translations[1].style.size = defaultSettings.translations[1].style.size
+  state.translations[1].style.shadowColor = defaultSettings.translations[1].style.shadowColor
+  state.translations[1].style.shadowOffset = defaultSettings.translations[1].style.shadowOffset
+  state.translations[1].style.weight = defaultSettings.translations[1].style.weight
+
+  saveToStorage(state)
+}
+
+function getValidTranslations(index: 0 | 1): typeof translationLanguages {
+  const srcBase = state.sourceLang
+  const otherLang = state.translations[1 - index].lang
+  return translationLanguages.filter(
+      lang => lang.code !== srcBase && lang.code !== otherLang
+  )
+}
+
+/* ---------- Provide/Inject para gestión de estado ---------- */
+
+const SETTINGS_KEY = Symbol('settings')
+interface SettingsInjection {
+  state: Settings
+  restoreDefaults: () => void
+  available1: Ref<typeof translationLanguages>
+  available2: Ref<typeof translationLanguages>
+}
+
+export function provideSettings(): void {
+  provide(SETTINGS_KEY, readonly(state))
+  provide('settingsMutation', {
+    state,
+    restoreDefaults,
+    available1: computed(() => getValidTranslations(0)),
+    available2: computed(() => getValidTranslations(1)),
+  })
+}
+
+export function useSettings(): SettingsInjection {
+  const injection = inject('settingsMutation') as SettingsInjection | undefined
+  if (!injection) {
+    throw new Error('useSettings debe llamarse dentro de un componente que tenga provideSettings')
+  }
+  return injection
 }
