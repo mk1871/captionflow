@@ -18,7 +18,7 @@ const languageOptions = speechLanguages.map(lang => ({
 const fontOptions = availableFonts.map(font => ({
   value: font,
   label: font,
-  fontFamily: font // Para preview de fuente
+  fontFamily: font
 }))
 
 // Opciones de peso válidas para la fuente seleccionada
@@ -43,20 +43,29 @@ watch(
 
 <template>
   <section class="flex flex-col gap-4 border border-border rounded-[var(--radius)] p-4 shadow-sm bg-card">
-    <!-- Encabezado con toggle consistente -->
+    <!-- Encabezado con toggle corregido -->
     <div class="flex items-center justify-between">
-      <div class="font-semibold leading-none tracking-tight text-lg text-foreground">Texto Original</div>
-      <!-- Toggle switch mejorado con mismo estilo que traducciones -->
-      <label class="inline-flex items-center cursor-pointer">
+      <div class="font-semibold leading-none tracking-tight text-lg text-foreground">
+        Texto Original
+      </div>
+
+      <!-- ✅ Toggle switch corregido -->
+      <div class="inline-flex items-center cursor-pointer select-none">
         <input
             type="checkbox"
             v-model="state.showOriginal"
             class="sr-only peer"
+            id="toggle-original"
             :aria-checked="state.showOriginal"
             aria-label="Mostrar texto original"
         />
-        <div class="relative w-11 h-6 bg-input rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-      </label>
+        <label
+            for="toggle-original"
+            class="relative w-11 h-6 bg-input rounded-full peer-checked:bg-primary transition-colors cursor-pointer"
+        >
+          <span class="absolute top-0.5 left-0.5 w-5 h-5 bg-white border border-gray-300 rounded-full transition-transform peer-checked:translate-x-full peer-checked:border-white"></span>
+        </label>
+      </div>
     </div>
 
     <!-- Controles deshabilitados cuando el original está inactivo -->
@@ -174,3 +183,10 @@ watch(
     </fieldset>
   </section>
 </template>
+
+<style scoped>
+/* Estilos para el toggle switch */
+input:checked + label span {
+  transform: translateX(100%);
+}
+</style>

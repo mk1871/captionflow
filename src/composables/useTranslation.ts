@@ -1,6 +1,6 @@
 import { ref, readonly, type Ref } from 'vue'
 
-/* ---------- Interfaces ---------- */
+/* ---------- Interfaces TypeScript ---------- */
 interface TranslationState {
   translatedText: Ref<string>
   isLoading: Ref<boolean>
@@ -50,7 +50,10 @@ export function useTranslation(): TranslationState {
       )
 
       if (!response.ok) {
-        throw new Error(`Error en la traducción: ${response.statusText}`)
+        // ✅ Crear error específico sin lanzar excepción innecesaria
+        error.value = `Error en la traducción: ${response.statusText}`
+        translatedText.value = ''
+        return
       }
 
       const data: GoogleTranslateResponse = await response.json()
@@ -59,12 +62,19 @@ export function useTranslation(): TranslationState {
       if (result !== translatedText.value) {
         translatedText.value = result
       }
-    } catch (e) {
-      if ((e as any).name === 'AbortError') {
-        // Petición cancelada, no hacer nada
-        return
+    } catch (caughtError: unknown) {
+      // ✅ Type guard para manejo seguro de errores
+      if (caughtError instanceof Error) {
+        if (caughtError.name === 'AbortError') {
+          // Petición cancelada, no hacer nada
+          return
+        }
+        error.value = caughtError.message
+      } else if (typeof caughtError === 'string') {
+        error.value = caughtError
+      } else {
+        error.value = 'Error desconocido en la traducción'
       }
-      error.value = e instanceof Error ? e.message : 'Error desconocido'
       translatedText.value = ''
     } finally {
       isLoading.value = false
