@@ -85,8 +85,8 @@ const defaultSettings: Settings = {
   isDarkMode: true,
   original: {
     font: 'Lato',
-    color: '#ffffff',
-    size: 33,
+    color: '#ffd700',
+    size: 37,
     shadowColor: '#000000',
     shadowOffset: 2,
     weight: 700,
@@ -97,8 +97,8 @@ const defaultSettings: Settings = {
       lang: 'en',
       style: {
         font: 'Montserrat',
-        color: '#ffd700',
-        size: 33,
+        color: '#ffffff',
+        size: 37,
         shadowColor: '#000000',
         shadowOffset: 2,
         weight: 700,
@@ -110,7 +110,7 @@ const defaultSettings: Settings = {
       style: {
         font: 'Noto Sans',
         color: '#1E90FF',
-        size: 33,
+        size: 37,
         shadowColor: '#000000',
         shadowOffset: 2,
         weight: 500,
