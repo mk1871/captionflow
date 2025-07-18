@@ -29,7 +29,7 @@ export function useSpeechRecognition(
   let recognition: SpeechRecognition | null = null
   let inactivityTimer: ReturnType<typeof setTimeout> | null = null
 
-  const TIMEOUT_DURATION = 4000 // 4 segundos sin voz para limpiar
+  const TIMEOUT_DURATION = 1400 // 4 segundos sin voz para limpiar
 
   if (SpeechRecognition) {
     recognition = new SpeechRecognition()
