@@ -28,9 +28,6 @@ if not exist "%DEST%" mkdir "%DEST%"
 
 echo [1/5] Copiando lanzador a %DEST%...
 copy /y "%~dp0captionflow.bat" "%DEST%\captionflow.bat" >nul
-copy /y "%~dp0captionflow-chroma.bat" "%DEST%\captionflow-chroma.bat" >nul
-copy /y "%~dp0tamano_ventana_croma.ps1" "%DEST%\tamano_ventana_croma.ps1" >nul
-copy /y "%~dp0restablecer_tamano_croma.bat" "%DEST%\restablecer_tamano_croma.bat" >nul
 if exist "%~dp0captionflow.ico" (
     copy /y "%~dp0captionflow.ico" "%DEST%\captionflow.ico" >nul
 ) else (
@@ -53,14 +50,6 @@ if defined LNKCREADO (
     echo        Acceso directo creado: %LNKCREADO%
 ) else (
     echo        ERROR: no se pudo crear el acceso directo.
-)
-
-set "LNK2="
-for /f "usebackq delims=" %%L in (`powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0crear_acceso_directo_cf.ps1" -TargetPath "%DEST%\captionflow-chroma.bat" -WorkingDir "%DEST%" -IconPath "%DEST%\captionflow.ico" -Name "CaptionFlow Croma" -Description "CaptionFlow - ventana de subtitulos (chroma)"`) do set "LNK2=%%L"
-if defined LNK2 (
-    echo        Acceso directo creado: %LNK2%
-) else (
-    echo        AVISO: no se pudo crear el acceso directo de chroma.
 )
 
 set "CHROME_WAS_RUNNING="
