@@ -10,7 +10,7 @@ function createDefaultStyle(): SubtitleStyle {
   return {
     font: 'Lato',
     color: '#ffd700',
-    size: 37,
+    size: 33,
     shadowColor: '#000000',
     shadowOffset: 2,
     weight: 700,
@@ -25,7 +25,7 @@ function createDefaultSettings(): Settings {
     showSubtitleBox: true,
     subtitleBoxOpacity: 60,
     chromaWidth: 672,
-    chromaHeight: 300,
+    chromaHeight: 302,
     original: createDefaultStyle(),
     translations: [
       {

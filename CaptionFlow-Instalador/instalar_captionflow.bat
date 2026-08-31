@@ -30,6 +30,7 @@ echo [1/5] Copiando lanzador a %DEST%...
 copy /y "%~dp0captionflow.bat" "%DEST%\captionflow.bat" >nul
 copy /y "%~dp0captionflow-chroma.bat" "%DEST%\captionflow-chroma.bat" >nul
 copy /y "%~dp0tamano_ventana_croma.ps1" "%DEST%\tamano_ventana_croma.ps1" >nul
+copy /y "%~dp0restablecer_tamano_croma.bat" "%DEST%\restablecer_tamano_croma.bat" >nul
 if exist "%~dp0captionflow.ico" (
     copy /y "%~dp0captionflow.ico" "%DEST%\captionflow.ico" >nul
 ) else (
