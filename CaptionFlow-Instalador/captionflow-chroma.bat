@@ -24,7 +24,7 @@ rem Asi ambas ventanas comparten sesion (BroadcastChannel + localStorage).
 set "PROFILE=%LocalAppData%\CaptionFlow\Profile"
 if not exist "%PROFILE%" mkdir "%PROFILE%"
 
-rem --- Tamano inicial desde el lienzo de OBS (60% ancho x 35% alto) ---
+rem --- Tamano inicial desde el lienzo de OBS (35% ancho x 28% alto) ---
 set "SIZESCRIPT=%~dp0tamano_ventana_croma.ps1"
 if not exist "%SIZESCRIPT%" set "SIZESCRIPT=%LocalAppData%\CaptionFlow\tamano_ventana_croma.ps1"
 set "WSIZE="
