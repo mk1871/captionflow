@@ -24,8 +24,8 @@ function createDefaultSettings(): Settings {
     isDarkMode: true,
     showSubtitleBox: true,
     subtitleBoxOpacity: 60,
-    chromaWidth: 960,
-    chromaHeight: 240,
+    chromaWidth: 672,
+    chromaHeight: 300,
     original: createDefaultStyle(),
     translations: [
       {

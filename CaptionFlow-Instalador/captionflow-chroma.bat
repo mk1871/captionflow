@@ -29,7 +29,7 @@ set "SIZESCRIPT=%~dp0tamano_ventana_croma.ps1"
 if not exist "%SIZESCRIPT%" set "SIZESCRIPT=%LocalAppData%\CaptionFlow\tamano_ventana_croma.ps1"
 set "WSIZE="
 if exist "%SIZESCRIPT%" for /f "usebackq delims=" %%S in (`powershell -NoProfile -ExecutionPolicy Bypass -File "%SIZESCRIPT%"`) do set "WSIZE=%%S"
-if not defined WSIZE set "WSIZE=960,240"
+if not defined WSIZE set "WSIZE=672,300"
 
 set "FLAGS=--disable-backgrounding-occluded-windows --disable-features=CalculateNativeWinOcclusion,IntensiveWakeUpThrottling --disable-renderer-backgrounding --disable-background-timer-throttling"
 

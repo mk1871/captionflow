@@ -1,13 +1,14 @@
 # Calcula el tamano recomendado para la ventana de chroma de CaptionFlow
 # a partir de la resolucion del lienzo (BaseWidth/BaseHeight) del perfil activo
-# de OBS Studio. Devuelve "ancho,alto". Fracciones: 50% del ancho, 22% del alto
-# (banner compacto para 2-4 lineas de subtitulos). Si OBS no esta configurado,
-# usa 960x240 (fraccion de un lienzo 1080p).
+# de OBS Studio. Devuelve "ancho,alto". Fracciones: 35% del ancho, 28% del alto
+# (banner compacto, mas estrecho que alto, estilo subtitulos a un lado).
+# Se ejecuta en CADA lanzamiento, asi refleja cualquier cambio del lienzo.
+# Si OBS no esta configurado, usa 672x300 (fraccion de un lienzo 1080p).
 $ErrorActionPreference = 'SilentlyContinue'
 
 $obs = Join-Path $env:APPDATA 'obs-studio'
-$w = 960
-$h = 240
+$w = 672
+$h = 300
 $ini = ''
 
 $globalIni = Join-Path $obs 'global.ini'
@@ -34,8 +35,8 @@ if ($ini -and (Test-Path $ini)) {
         if ($_ -match '^BaseWidth=(\d+)') { $baseW = [int]$Matches[1] }
         elseif ($_ -match '^BaseHeight=(\d+)') { $baseH = [int]$Matches[1] }
     }
-    $w = [int][math]::Round($baseW * 0.5)
-    $h = [int][math]::Round($baseH * 0.22)
+    $w = [int][math]::Round($baseW * 0.35)
+    $h = [int][math]::Round($baseH * 0.28)
 }
 
 Write-Output ("{0},{1}" -f $w, $h)
