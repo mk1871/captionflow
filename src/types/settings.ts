@@ -21,6 +21,7 @@ export interface Settings {
   isDarkMode: boolean
   showSubtitleBox: boolean
   subtitleBoxOpacity: number
+  subtitleBoxColor: string
   chromaWidth: number
   chromaHeight: number
 }

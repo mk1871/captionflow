@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
 import { useSubtitlesStore } from '@/stores/subtitles'
+import { hexToRgba } from '@/lib/utils'
 import SubtitleLines from '@/components/overlay/SubtitleLines.vue'
 
 withDefaults(
@@ -23,7 +24,12 @@ const showOriginal = computed(
 
 const boxStyle = computed(() =>
   settings.settings.showSubtitleBox
-    ? { backgroundColor: `rgba(0, 0, 0, ${settings.settings.subtitleBoxOpacity / 100})` }
+    ? {
+        backgroundColor: hexToRgba(
+          settings.settings.subtitleBoxColor,
+          settings.settings.subtitleBoxOpacity / 100,
+        ),
+      }
     : {},
 )
 </script>
@@ -39,12 +45,9 @@ const boxStyle = computed(() =>
       </div>
 
       <div
-        v-if="translation1.active"
-        :style="{
-          minHeight: `${translation1.style.size * 2.6}px`,
-          ...(subtitles.trans1.trim() !== '' ? boxStyle : {}),
-        }"
+        v-if="translation1.active && subtitles.trans1.trim() !== ''"
         class="rounded-lg px-3 py-1"
+        :style="boxStyle"
       >
         <SubtitleLines :text="subtitles.trans1" :style="translation1.style" />
       </div>

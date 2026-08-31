@@ -16,6 +16,7 @@ import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import RecordingStatus from '@/components/panel/RecordingStatus.vue'
 import SubtitleSection from '@/components/panel/SubtitleSection.vue'
+import ColorField from '@/components/controls/ColorField.vue'
 
 defineProps<{
   isListening: boolean
@@ -150,6 +151,11 @@ const boxOpacity = computed<number[]>({
         <span class="w-8 text-xs text-muted-foreground"
           >{{ settings.settings.subtitleBoxOpacity }}%</span
         >
+        <ColorField
+          v-model="settings.settings.subtitleBoxColor"
+          :disabled="!settings.settings.showSubtitleBox"
+          aria-label="Color del fondo"
+        />
       </div>
     </div>
 

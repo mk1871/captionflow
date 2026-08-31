@@ -23,7 +23,8 @@ function createDefaultSettings(): Settings {
     sourceLang: 'es',
     isDarkMode: true,
     showSubtitleBox: true,
-    subtitleBoxOpacity: 60,
+    subtitleBoxOpacity: 80,
+    subtitleBoxColor: '#000000',
     chromaWidth: 672,
     chromaHeight: 302,
     original: createDefaultStyle(),
@@ -62,6 +63,7 @@ function loadFromStorage(): Settings {
       isDarkMode: parsed.isDarkMode ?? defaults.isDarkMode,
       showSubtitleBox: parsed.showSubtitleBox ?? defaults.showSubtitleBox,
       subtitleBoxOpacity: parsed.subtitleBoxOpacity ?? defaults.subtitleBoxOpacity,
+      subtitleBoxColor: parsed.subtitleBoxColor ?? defaults.subtitleBoxColor,
       chromaWidth: parsed.chromaWidth ?? defaults.chromaWidth,
       chromaHeight: parsed.chromaHeight ?? defaults.chromaHeight,
       original: { ...defaults.original, ...parsed.original },
@@ -98,6 +100,7 @@ export const useSettingsStore = defineStore('settings', () => {
     settings.isDarkMode = defaults.isDarkMode
     settings.showSubtitleBox = defaults.showSubtitleBox
     settings.subtitleBoxOpacity = defaults.subtitleBoxOpacity
+    settings.subtitleBoxColor = defaults.subtitleBoxColor
     settings.chromaWidth = defaults.chromaWidth
     settings.chromaHeight = defaults.chromaHeight
     settings.original = { ...defaults.original }
