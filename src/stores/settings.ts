@@ -22,6 +22,10 @@ function createDefaultSettings(): Settings {
     showOriginal: true,
     sourceLang: 'es',
     isDarkMode: true,
+    showSubtitleBox: true,
+    subtitleBoxOpacity: 60,
+    chromaWidth: 960,
+    chromaHeight: 240,
     original: createDefaultStyle(),
     translations: [
       {
@@ -32,7 +36,7 @@ function createDefaultSettings(): Settings {
       {
         active: false,
         lang: 'fr',
-        style: { ...createDefaultStyle(), font: 'Noto Sans', color: '#1E90FF', weight: 500 },
+        style: { ...createDefaultStyle(), font: 'Noto Sans', color: '#4FC3F7', weight: 500 },
       },
     ],
   }
@@ -56,6 +60,10 @@ function loadFromStorage(): Settings {
       showOriginal: parsed.showOriginal ?? defaults.showOriginal,
       sourceLang: parsed.sourceLang ?? defaults.sourceLang,
       isDarkMode: parsed.isDarkMode ?? defaults.isDarkMode,
+      showSubtitleBox: parsed.showSubtitleBox ?? defaults.showSubtitleBox,
+      subtitleBoxOpacity: parsed.subtitleBoxOpacity ?? defaults.subtitleBoxOpacity,
+      chromaWidth: parsed.chromaWidth ?? defaults.chromaWidth,
+      chromaHeight: parsed.chromaHeight ?? defaults.chromaHeight,
       original: { ...defaults.original, ...parsed.original },
       translations: defaults.translations.map((def, i) => ({
         ...def,
@@ -88,6 +96,10 @@ export const useSettingsStore = defineStore('settings', () => {
     settings.showOriginal = defaults.showOriginal
     settings.sourceLang = defaults.sourceLang
     settings.isDarkMode = defaults.isDarkMode
+    settings.showSubtitleBox = defaults.showSubtitleBox
+    settings.subtitleBoxOpacity = defaults.subtitleBoxOpacity
+    settings.chromaWidth = defaults.chromaWidth
+    settings.chromaHeight = defaults.chromaHeight
     settings.original = { ...defaults.original }
     settings.translations = defaults.translations.map((t) => ({ ...t, style: { ...t.style } }))
   }

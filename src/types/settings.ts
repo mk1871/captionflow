@@ -19,4 +19,8 @@ export interface Settings {
   original: SubtitleStyle
   translations: TranslationSetting[]
   isDarkMode: boolean
+  showSubtitleBox: boolean
+  subtitleBoxOpacity: number
+  chromaWidth: number
+  chromaHeight: number
 }

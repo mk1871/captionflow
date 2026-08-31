@@ -1,7 +1,7 @@
 @echo off
-title CaptionFlow
+title CaptionFlow Croma
 setlocal
-set "URL=https://mk1871.github.io/captionflow/"
+set "URL=https://mk1871.github.io/captionflow/?chroma=1"
 
 set "NAVEGADOR="
 
@@ -19,15 +19,21 @@ if not defined NAVEGADOR (
     goto :fin
 )
 
-rem --- Perfil dedicado para CaptionFlow ---
-rem Los flags solo se aplican si Chrome arranca como instancia nueva; un perfil
-rem propio evita chocar con el Chrome del usuario y aísla permisos y cache.
+rem --- MISMO perfil dedicado que la ventana principal ---
+rem Asi ambas ventanas comparten sesion (BroadcastChannel + localStorage).
 set "PROFILE=%LocalAppData%\CaptionFlow\Profile"
 if not exist "%PROFILE%" mkdir "%PROFILE%"
 
+rem --- Tamano inicial desde el lienzo de OBS (60% ancho x 35% alto) ---
+set "SIZESCRIPT=%~dp0tamano_ventana_croma.ps1"
+if not exist "%SIZESCRIPT%" set "SIZESCRIPT=%LocalAppData%\CaptionFlow\tamano_ventana_croma.ps1"
+set "WSIZE="
+if exist "%SIZESCRIPT%" for /f "usebackq delims=" %%S in (`powershell -NoProfile -ExecutionPolicy Bypass -File "%SIZESCRIPT%"`) do set "WSIZE=%%S"
+if not defined WSIZE set "WSIZE=960,240"
+
 set "FLAGS=--disable-backgrounding-occluded-windows --disable-features=CalculateNativeWinOcclusion,IntensiveWakeUpThrottling --disable-renderer-backgrounding --disable-background-timer-throttling"
 
-start "" "%NAVEGADOR%" --app=%URL% --user-data-dir="%PROFILE%" %FLAGS%
+start "" "%NAVEGADOR%" --app=%URL% --user-data-dir="%PROFILE%" --window-size=%WSIZE% %FLAGS%
 
 :fin
 endlocal

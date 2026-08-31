@@ -66,7 +66,7 @@ function commit(): void {
       :aria-label="ariaLabel"
       class="min-w-0 flex-1"
     />
-<div class="relative w-12 shrink-0">
+    <div class="relative w-12 shrink-0">
       <Input
         v-model="text"
         type="text"
@@ -79,7 +79,9 @@ function commit(): void {
         @change="commit"
         @keydown.enter.prevent="commit"
       />
-      <span class="pointer-events-none absolute inset-y-0 right-1 flex items-center text-[9px] text-muted-foreground">
+      <span
+        class="pointer-events-none absolute inset-y-0 right-1 flex items-center text-[9px] text-muted-foreground"
+      >
         px
       </span>
     </div>

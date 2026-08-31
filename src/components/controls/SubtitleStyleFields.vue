@@ -51,12 +51,24 @@ watch(font, (newFont) => {
 
     <div class="flex flex-col gap-1.5">
       <span class="text-xs font-medium text-muted-foreground">Fuente</span>
-      <SelectField v-model="font" :options="fontOptions" size="sm" class="w-full" aria-label="Fuente" />
+      <SelectField
+        v-model="font"
+        :options="fontOptions"
+        size="sm"
+        class="w-full"
+        aria-label="Fuente"
+      />
     </div>
 
     <div class="flex flex-col gap-1.5">
       <span class="text-xs font-medium text-muted-foreground">Peso</span>
-      <SelectField v-model="weightText" :options="weightOptions" size="sm" class="w-full" aria-label="Peso" />
+      <SelectField
+        v-model="weightText"
+        :options="weightOptions"
+        size="sm"
+        class="w-full"
+        aria-label="Peso"
+      />
     </div>
 
     <div class="flex flex-col gap-1.5">
