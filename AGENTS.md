@@ -18,8 +18,10 @@ pnpm build        # pnpm type-check && pnpm build-only
 pnpm type-check   # vue-tsc --build
 pnpm lint         # oxlint . --fix  +  eslint . --fix --cache
 pnpm format       # prettier
-pnpm deploy       # build + gh-pages -d dist  (rama gh-pages)
+pnpm run deploy   # build + gh-pages -d dist  (rama gh-pages)
 ```
+
+> **Ojo:** `pnpm run deploy` (con `run`). `pnpm deploy` solo es un comando nativo de pnpm (workspace) y fallará con `ERR_PNPM_INVALID_DEPLOY_TARGET`.
 
 ## Gotchas (importantes)
 
