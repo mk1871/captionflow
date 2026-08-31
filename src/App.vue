@@ -1,11 +1,11 @@
-<script setup lang="ts">
-// Importa el provider y el nuevo componente principal
-import SettingsProvider from "@/components/SettingsProvider.vue"
-import AppContent from "@/components/AppContent.vue"
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <SettingsProvider>
-    <AppContent />
-  </SettingsProvider>
+  <h1>You did it!</h1>
+  <p>
+    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
+    documentation
+  </p>
 </template>
+
+<style scoped></style>
