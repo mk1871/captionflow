@@ -27,6 +27,8 @@ function createDefaultSettings(): Settings {
     subtitleBoxColor: '#000000',
     chromaWidth: 672,
     chromaHeight: 302,
+    soundsEnabled: true,
+    soundsVolume: 70,
     original: createDefaultStyle(),
     translations: [
       {
@@ -76,6 +78,8 @@ function loadFromStorage(): Settings {
       subtitleBoxColor: parsed.subtitleBoxColor ?? defaults.subtitleBoxColor,
       chromaWidth: parsed.chromaWidth ?? defaults.chromaWidth,
       chromaHeight: parsed.chromaHeight ?? defaults.chromaHeight,
+      soundsEnabled: parsed.soundsEnabled ?? defaults.soundsEnabled,
+      soundsVolume: parsed.soundsVolume ?? defaults.soundsVolume,
       original: {
         ...defaults.original,
         ...parsed.original,
@@ -121,6 +125,8 @@ export const useSettingsStore = defineStore('settings', () => {
     settings.subtitleBoxColor = defaults.subtitleBoxColor
     settings.chromaWidth = defaults.chromaWidth
     settings.chromaHeight = defaults.chromaHeight
+    settings.soundsEnabled = defaults.soundsEnabled
+    settings.soundsVolume = defaults.soundsVolume
     settings.original = { ...defaults.original }
     settings.translations = defaults.translations.map((t) => ({ ...t, style: { ...t.style } }))
   }

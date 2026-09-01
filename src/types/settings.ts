@@ -24,4 +24,6 @@ export interface Settings {
   subtitleBoxColor: string
   chromaWidth: number
   chromaHeight: number
+  soundsEnabled: boolean
+  soundsVolume: number
 }

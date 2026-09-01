@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, watch } from 'vue'
 import { toast } from 'vue-sonner'
+import { play } from 'cuelume'
 import { useSettingsStore } from '@/stores/settings'
 import { useSubtitlesStore } from '@/stores/subtitles'
 import { useSpeechRecognition } from '@/composables/useSpeechRecognition'
@@ -69,6 +70,7 @@ const FATAL_SPEECH_ERRORS = new Set(['not-allowed', 'service-not-allowed', 'audi
 watch(error, (value) => {
   if (value && FATAL_SPEECH_ERRORS.has(value)) {
     toast.error('Micrófono', { id: 'mic-error', description: value })
+    play('error')
   }
 })
 
@@ -76,6 +78,7 @@ watch([translationError1, translationError2], ([e1, e2]) => {
   const value = e1 ?? e2
   if (value) {
     toast.error('Traducción', { id: 'translation-error', description: value })
+    play('error')
   }
 })
 
@@ -88,8 +91,10 @@ watch(() => settings.settings.isDarkMode, applyDarkMode)
 function toggleListening(): void {
   if (isListening.value) {
     stop()
+    play('release')
   } else {
     start()
+    play('loading')
   }
 }
 

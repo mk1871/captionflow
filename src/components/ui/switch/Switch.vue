@@ -18,6 +18,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
   <SwitchRoot
     v-slot="slotProps"
     data-slot="switch"
+    data-cuelume-toggle
     v-bind="forwarded"
     :class="
       cn(

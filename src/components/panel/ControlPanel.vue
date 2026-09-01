@@ -9,6 +9,7 @@ import {
   SunIcon,
 } from '@lucide/vue'
 import { useSettingsStore } from '@/stores/settings'
+import { play } from 'cuelume'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Slider } from '@/components/ui/slider'
@@ -33,6 +34,12 @@ function openChromaWindow(): void {
   const width = settings.settings.chromaWidth
   const height = settings.settings.chromaHeight
   window.open(url, 'captionflow-chroma', `popup=yes,width=${width},height=${height},resizable=yes`)
+  play('success')
+}
+
+function restoreDefaults(): void {
+  settings.restoreDefaults()
+  play('success')
 }
 
 const chromaWText = ref(String(settings.settings.chromaWidth))
@@ -59,6 +66,13 @@ const boxOpacity = computed<number[]>({
   get: () => [settings.settings.subtitleBoxOpacity],
   set: (v) => {
     settings.settings.subtitleBoxOpacity = v[0] ?? 0
+  },
+})
+
+const soundsVolume = computed<number[]>({
+  get: () => [settings.settings.soundsVolume],
+  set: (v) => {
+    settings.settings.soundsVolume = v[0] ?? 0
   },
 })
 </script>
@@ -103,7 +117,7 @@ const boxOpacity = computed<number[]>({
           <MoonIcon v-else class="size-4" />
         </Button>
 
-        <Button variant="outline" size="sm" @click="settings.restoreDefaults()">
+        <Button variant="outline" size="sm" @click="restoreDefaults">
           <RotateCcwIcon class="size-4" />
           Restaurar
         </Button>
@@ -156,6 +170,21 @@ const boxOpacity = computed<number[]>({
           :disabled="!settings.settings.showSubtitleBox"
           aria-label="Color del fondo"
         />
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="shrink-0 text-xs font-medium text-muted-foreground">Sonidos</span>
+        <Switch v-model="settings.settings.soundsEnabled" :aria-label="'Sonidos de interacción'" />
+        <Slider
+          v-model="soundsVolume"
+          :min="0"
+          :max="100"
+          :step="5"
+          :disabled="!settings.settings.soundsEnabled"
+          :aria-label="'Volumen de los sonidos'"
+          class="w-28"
+        />
+        <span class="w-8 text-xs text-muted-foreground">{{ settings.settings.soundsVolume }}%</span>
       </div>
     </div>
 

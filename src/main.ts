@@ -1,6 +1,9 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { watch } from 'vue'
+import { bind, setEnabled, setVolume } from 'cuelume'
 import App from './App.vue'
+import { useSettingsStore } from '@/stores/settings'
 import '@fontsource-variable/outfit/wght.css'
 import '@fontsource-variable/inter/wght.css'
 import '@fontsource-variable/roboto/wght.css'
@@ -14,6 +17,17 @@ import './style.css'
 
 const app = createApp(App)
 
-app.use(createPinia())
+const pinia = createPinia()
+app.use(pinia)
+
+const settings = useSettingsStore(pinia)
+bind()
+setEnabled(settings.settings.soundsEnabled)
+setVolume(settings.settings.soundsVolume / 100)
+watch(() => settings.settings.soundsEnabled, setEnabled)
+watch(
+  () => settings.settings.soundsVolume,
+  (volume) => setVolume(volume / 100),
+)
 
 app.mount('#app')
