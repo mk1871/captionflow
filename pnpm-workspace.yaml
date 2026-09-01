@@ -1,2 +1,11 @@
 allowBuilds:
   vue-demi: true
+  fontsource-variable/outfit: true
+  fontsource-variable/inter: true
+  fontsource-variable/roboto: true
+  fontsource/lato: true
+  fontsource-variable/montserrat: true
+  fontsource-variable/open-sans: true
+  fontsource-variable/noto-sans: true
+
+  

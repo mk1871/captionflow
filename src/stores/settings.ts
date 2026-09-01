@@ -2,7 +2,7 @@ import { reactive, watch } from 'vue'
 import { defineStore } from 'pinia'
 import type { Settings, SubtitleStyle } from '@/types/settings'
 import { translationLanguages, type LanguageOption } from '@/lib/languages'
-import { normalizeWeight } from '@/lib/fonts'
+import { normalizeWeight, migrateFontName } from '@/lib/fonts'
 
 const STORAGE_KEY = 'captionflow.settings.v2'
 
@@ -32,12 +32,22 @@ function createDefaultSettings(): Settings {
       {
         active: true,
         lang: 'en',
-        style: { ...createDefaultStyle(), font: 'Montserrat', color: '#ffffff', weight: 700 },
+        style: {
+          ...createDefaultStyle(),
+          font: 'Montserrat Variable',
+          color: '#ffffff',
+          weight: 700,
+        },
       },
       {
         active: false,
         lang: 'fr',
-        style: { ...createDefaultStyle(), font: 'Noto Sans', color: '#4FC3F7', weight: 500 },
+        style: {
+          ...createDefaultStyle(),
+          font: 'Noto Sans Variable',
+          color: '#4FC3F7',
+          weight: 500,
+        },
       },
     ],
   }
@@ -66,11 +76,19 @@ function loadFromStorage(): Settings {
       subtitleBoxColor: parsed.subtitleBoxColor ?? defaults.subtitleBoxColor,
       chromaWidth: parsed.chromaWidth ?? defaults.chromaWidth,
       chromaHeight: parsed.chromaHeight ?? defaults.chromaHeight,
-      original: { ...defaults.original, ...parsed.original },
+      original: {
+        ...defaults.original,
+        ...parsed.original,
+        font: migrateFontName(parsed.original.font ?? defaults.original.font),
+      },
       translations: defaults.translations.map((def, i) => ({
         ...def,
         ...parsed.translations?.[i],
-        style: { ...def.style, ...parsed.translations?.[i]?.style },
+        style: {
+          ...def.style,
+          ...parsed.translations?.[i]?.style,
+          font: migrateFontName(parsed.translations?.[i]?.style?.font ?? def.style.font),
+        },
       })),
     }
   } catch {
