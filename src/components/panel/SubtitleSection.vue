@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
 import { speechLanguages } from '@/lib/languages'
+import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import SelectField from '@/components/controls/SelectField.vue'
 import SubtitleStyleFields from '@/components/controls/SubtitleStyleFields.vue'
@@ -88,9 +89,9 @@ const languageOptions = computed(() => {
       >
         <template #extra>
           <div class="flex flex-col gap-1.5">
-            <span class="text-xs font-medium text-muted-foreground">
+            <Label class="text-xs font-medium text-muted-foreground">
               {{ isOriginal ? 'Entrada' : 'Idioma' }}
-            </span>
+            </Label>
             <SelectField
               v-model="language"
               :options="languageOptions"

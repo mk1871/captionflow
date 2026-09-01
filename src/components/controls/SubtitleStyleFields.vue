@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { availableFonts, fontWeightsByFont, normalizeWeight } from '@/lib/fonts'
+import { Label } from '@/components/ui/label'
 import SelectField from '@/components/controls/SelectField.vue'
 import ColorField from '@/components/controls/ColorField.vue'
 import SizeControl from '@/components/controls/SizeControl.vue'
@@ -50,7 +51,7 @@ watch(font, (newFont) => {
     <slot name="extra" />
 
     <div class="flex flex-col gap-1.5">
-      <span class="text-xs font-medium text-muted-foreground">Fuente</span>
+      <Label class="text-xs font-medium text-muted-foreground">Fuente</Label>
       <SelectField
         v-model="font"
         :options="fontOptions"
@@ -61,7 +62,7 @@ watch(font, (newFont) => {
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <span class="text-xs font-medium text-muted-foreground">Peso</span>
+      <Label class="text-xs font-medium text-muted-foreground">Peso</Label>
       <SelectField
         v-model="weightText"
         :options="weightOptions"
@@ -72,22 +73,22 @@ watch(font, (newFont) => {
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <span class="text-xs font-medium text-muted-foreground">Color</span>
+      <Label class="text-xs font-medium text-muted-foreground">Color</Label>
       <ColorField v-model="color" class="w-full" aria-label="Color del texto" />
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <span class="text-xs font-medium text-muted-foreground">Tamaño</span>
+      <Label class="text-xs font-medium text-muted-foreground">Tamaño</Label>
       <SizeControl v-model="size" :min="24" :max="96" aria-label="Tamaño del texto" />
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <span class="text-xs font-medium text-muted-foreground">Contorno</span>
+      <Label class="text-xs font-medium text-muted-foreground">Contorno</Label>
       <ColorField v-model="shadowColor" class="w-full" aria-label="Color del contorno" />
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <span class="text-xs font-medium text-muted-foreground">Grosor</span>
+      <Label class="text-xs font-medium text-muted-foreground">Grosor</Label>
       <SizeControl v-model="shadowOffset" :min="0" :max="10" aria-label="Grosor del contorno" />
     </div>
   </div>

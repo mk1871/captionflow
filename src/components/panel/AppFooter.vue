@@ -2,6 +2,7 @@
 import { MailIcon } from '@lucide/vue'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
 const author = 'Manuel Kas'
 const location = 'Bucaramanga, Colombia'
@@ -33,24 +34,24 @@ function openEmail(): void {
     <div class="mx-auto w-full max-w-3xl px-4 py-8">
       <div class="flex flex-col items-center gap-6">
         <div class="flex items-center gap-3">
-          <span
-            class="flex size-9 items-center justify-center rounded-md bg-primary/10 text-primary"
-          >
-            <svg
-              class="size-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M3 7h18M3 12h18M3 17h12" />
-              <path d="M21 7v10l-3-3" />
-              <circle cx="18" cy="12" r="2" />
-            </svg>
-          </span>
+          <Avatar class="size-9 rounded-md">
+            <AvatarFallback class="bg-primary/10 text-primary">
+              <svg
+                class="size-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M3 7h18M3 12h18M3 17h12" />
+                <path d="M21 7v10l-3-3" />
+                <circle cx="18" cy="12" r="2" />
+              </svg>
+            </AvatarFallback>
+          </Avatar>
           <div class="text-center">
             <h3 class="text-base font-semibold tracking-tight">
               CaptionFlow <span class="text-sm font-normal text-muted-foreground">v1.0.0</span>
