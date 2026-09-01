@@ -8,6 +8,7 @@ import { useSpeechRecognition } from '@/composables/useSpeechRecognition'
 import { useTranslation } from '@/composables/useTranslation'
 import { useChromaBroadcaster } from '@/composables/useChromaBroadcaster'
 import { Toaster } from '@/components/ui/sonner'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import SubtitlesOverlay from '@/components/overlay/SubtitlesOverlay.vue'
 import ControlPanel from '@/components/panel/ControlPanel.vue'
 import AppFooter from '@/components/panel/AppFooter.vue'
@@ -113,7 +114,7 @@ onUnmounted(() => {
   <main class="grid h-screen w-screen grid-rows-[30vh_1fr] overflow-hidden">
     <SubtitlesOverlay :chroma="false" />
 
-    <div class="min-h-0 overflow-y-auto bg-background text-foreground">
+    <ScrollArea class="min-h-0 h-full bg-background text-foreground">
       <div class="mx-auto w-full max-w-3xl p-4">
         <ControlPanel
           :is-listening="isListening"
@@ -122,7 +123,7 @@ onUnmounted(() => {
         />
       </div>
       <AppFooter />
-    </div>
+    </ScrollArea>
 
     <Toaster position="top-center" rich-colors />
   </main>

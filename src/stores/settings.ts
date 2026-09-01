@@ -28,7 +28,7 @@ function createDefaultSettings(): Settings {
     chromaWidth: 672,
     chromaHeight: 302,
     soundsEnabled: true,
-    soundsVolume: 70,
+    soundsVolume: 50,
     original: createDefaultStyle(),
     translations: [
       {
